@@ -117,7 +117,7 @@ make
  sh ./scripts/build.sh
  ```
 
-**注意**: OPENCV依赖OPENBLAS，Ubuntu用户需确认系统是否已存在`libopenblas.so`。如未安装，可执行apt-get install libopenblas-dev进行安装。
+**注意**: OPENCV依赖OPENBLAS，Ubuntu用户需确认系统是否已存在`libopenblas.so`。如未安装，可执行apt-get install libopenblas-dev进行安装。可能有些库需要复制至运行目录
 
 ### Step4: 预测及可视化
 编译成功后，预测入口程序为`build/main`其主要命令参数说明如下：
