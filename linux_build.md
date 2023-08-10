@@ -10,7 +10,7 @@
 
 请确保系统已经安装好上述基本软件，**下面所有示例以工作目录为 `/root/projects/`演示**。
 ### 所需库与环境
-* SPDLOG 
+* SPDLOG (主要习惯于用这个输出信息)
 * opencv (注意编译版本的匹配)
 
 ### 主要目录和文件
@@ -58,9 +58,9 @@ paddle_inference
 **注意:** 预编译版本除`nv-jetson-cuda10-cudnn7.5-trt5` 以外其它包都是基于`GCC 4.8.5`编译，使用高版本`GCC`可能存在 `ABI`兼容性问题，建议降级或[自行编译预测库](https://www.paddlepaddle.org.cn/documentation/docs/zh/advanced_guide/inference_deployment/inference/build_and_install_lib_cn.html)。
 
 
-### Step3: 编译
+### Step2: 编译
 
-编译`cmake`的命令在`build.sh`中，请根据实际情况修改主要参数，其主要内容说明如下：
+编译`cmake`的命令在`build.sh`中，请根据实际情况修改主要参数，其主要内容说明如下(因为主要实现跨镜头算,其余功能未开启)：
 
 ```
 # 是否使用GPU(即是否使用 CUDA)
@@ -121,24 +121,24 @@ make
 
 ### Step4: 预测及可视化
 编译成功后，预测入口程序为`build/main`其主要命令参数说明如下：
-|  参数   | 说明  |
-|  ----  | ----  |
-| --model_dir  | 导出的检测预测模型所在路径 |
-| --model_dir_keypoint  | Option | 导出的关键点预测模型所在路径 |
-| --image_file  | 要预测的图片文件路径 |
-| --image_dir  |  要预测的图片文件夹路径   |
-| --video_file  | 要预测的视频文件路径 |
-| --camera_id | Option | 用来预测的摄像头ID，默认为-1（表示不使用摄像头预测）|
-| --device  | 运行时的设备，可选择`CPU/GPU/XPU`，默认为`CPU`|
-| --gpu_id  |  指定进行推理的GPU device id(默认值为0)|
-| --run_mode | 使用GPU时，默认为paddle, 可选（paddle/trt_fp32/trt_fp16/trt_int8）|
-| --batch_size  | 检测模型预测时的batch size，在指定`image_dir`时有效 |
-| --batch_size_keypoint  | 关键点模型预测时的batch size，默认为8 |
-| --run_benchmark | 是否重复预测来进行benchmark测速 ｜
-| --output_dir | 输出图片所在的文件夹, 默认为output ｜
-| --use_mkldnn | CPU预测中是否开启MKLDNN加速 |
-| --cpu_threads | 设置cpu线程数，默认为1 |
-| --use_dark | 关键点模型输出预测是否使用DarkPose后处理，默认为true |
+| 参数                  | 说明                                                               |
+| --------------------- | ------------------------------------------------------------------ |
+| --model_dir           | 导出的检测预测模型所在路径                                         |
+| --model_dir_keypoint  | Option                                                             | 导出的关键点预测模型所在路径                         |
+| --image_file          | 要预测的图片文件路径                                               |
+| --image_dir           | 要预测的图片文件夹路径                                             |
+| --video_file          | 要预测的视频文件路径                                               |
+| --camera_id           | Option                                                             | 用来预测的摄像头ID，默认为-1（表示不使用摄像头预测） |
+| --device              | 运行时的设备，可选择`CPU/GPU/XPU`，默认为`CPU`                     |
+| --gpu_id              | 指定进行推理的GPU device id(默认值为0)                             |
+| --run_mode            | 使用GPU时，默认为paddle, 可选（paddle/trt_fp32/trt_fp16/trt_int8） |
+| --batch_size          | 检测模型预测时的batch size，在指定`image_dir`时有效                |
+| --batch_size_keypoint | 关键点模型预测时的batch size，默认为8                              |
+| --run_benchmark       | 是否重复预测来进行benchmark测速 ｜                                 |
+| --output_dir          | 输出图片所在的文件夹, 默认为output ｜                              |
+| --use_mkldnn          | CPU预测中是否开启MKLDNN加速                                        |
+| --cpu_threads         | 设置cpu线程数，默认为1                                             |
+| --use_dark            | 关键点模型输出预测是否使用DarkPose后处理，默认为true               |
 
 **注意**:
 - 优先级顺序：`camera_id` > `video_file` > `image_dir` > `image_file`。
@@ -151,3 +151,5 @@ make
 ./build/main --model_dir=./mot_ppyoloe_s_36e_pipeline --model_dir_reid=./reid_model --video_file='rtsp://admin:abc123456@192.168.0.82:554/cam/realmonitor?channel=1&subtype=0' --device=GPU
 
 ```
+
+## api以及使用说明可以参见[飞桨文档](https://www.paddlepaddle.org.cn/inference/v2.5/guides/introduction/index_intro.html)
